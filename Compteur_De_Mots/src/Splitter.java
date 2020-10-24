@@ -23,7 +23,7 @@ public class Splitter {
 		
 
         int i = 1;
-        //Path[] listSplits = new Path[10];
+        
         try(BufferedReader reader = Files.newBufferedReader(bigFile)){
             String line = null;
             int lineNum = 1;

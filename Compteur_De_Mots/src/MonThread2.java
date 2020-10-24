@@ -5,7 +5,14 @@ import java.util.StringTokenizer;
 
 
 
-public class MonThread2 implements Runnable  {
+public class MonThread2 extends Thread implements Runnable   {
+	
+	public String partieAMaper;
+	public Hashtable listMaps [] = new Hashtable[10];
+	
+	public Hashtable[] getListMaps() {
+		return listMaps;
+	}
 
 	@Override
 	public void run() {
@@ -13,7 +20,7 @@ public class MonThread2 implements Runnable  {
 		Hashtable table = new Hashtable();
 	      BufferedReader entree = null;
 		try {
-			entree = new BufferedReader(new FileReader("2split.txt"));
+			entree = new BufferedReader(new FileReader(partieAMaper));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,12 +73,17 @@ public class MonThread2 implements Runnable  {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	      
 	    
 		
 		
 		
-		//new Thread(new MonThread2()).start();
+		
 }
+
+	
+
+	
 		
 	}
 
