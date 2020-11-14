@@ -1,7 +1,9 @@
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Scanner;
@@ -10,12 +12,47 @@ public class Test {
 	
 	
 
+	public static void ecritureFichier(Hashtable<String, Integer> table_paire, Hashtable<String, Integer> table_impaire) throws IOException {
+		Hashtable<String, Integer> table = new Hashtable<String, Integer>();
+		String mot;
+		Integer nbOcc;
+		Integer cpt = 0;
+		FileWriter fw = new FileWriter("fichier_final.txt");
+		while (cpt != 2) {
+		table = (cpt == 0) ? table_paire : table_impaire;
+		Enumeration<String> lesMots = table.keys();
+		while (lesMots.hasMoreElements())
+		{
+			mot = (String)lesMots.nextElement();
+			nbOcc = ((Integer)table.get(mot)).intValue();
+			String phrase = "Le mot " + mot + " figure " +
+					nbOcc + " fois";
+			fw.write(phrase + "\n");
+		}
+		cpt++;
+		}
+
+		fw.close();
+	}
 	
-	public static void main (String[] argv) throws IOException
+	
+	
+	
+	
+	public static void main (String[] argv) throws IOException, InterruptedException
     {
 		Splitter split = new Splitter();
 		CompteurMots compteur = new CompteurMots();
 
+		
+		Hashtable<String, Integer> table0 = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> table1 = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> table2 = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> table3 = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> table4 = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> table5 = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> table6 = new Hashtable<String, Integer>();
+		Hashtable<String, Integer> table7 = new Hashtable<String, Integer>();
 		
 		
 		Scanner scanFichier = new Scanner(System.in); 
@@ -36,34 +73,42 @@ public class Test {
 	    
 	    split.splitTextFiles(chemin,lignesMax);
 	    
-	    MonThread2 thread1 = new MonThread2();
-	    thread1.partieAMaper="1split.txt";
+	    Map thread1 = new Map(table0,table1,"1split.txt");
 	    thread1.start();
 	    
-	    MonThread2 thread2 = new MonThread2();
-	    thread2.partieAMaper="2split.txt";
+	    Map thread2 = new Map(table2,table3,"2split.txt");
 	    thread2.start();
 	    
-	    MonThread2 thread3 = new MonThread2();
-	    thread3.partieAMaper="3split.txt";
+	    Map thread3 = new Map(table4,table5,"3split.txt");
 	    thread3.start();
 	    
-	    MonThread2 thread4 = new MonThread2();
-	    thread4.partieAMaper="4split.txt";
+	    Map thread4 = new Map(table6,table7,"4split.txt");
 	    thread4.start();
 	    
-	    MonThread2 thread5 = new MonThread2();
-	    thread5.partieAMaper="5split.txt";
-	    thread5.start();
 	    
-	    
+		ArrayList<Hashtable<String, Integer>> paires = new ArrayList<Hashtable<String, Integer>>();
+		ArrayList<Hashtable<String, Integer>> impaires = new ArrayList<Hashtable<String, Integer>>();
 		
-	   
-		//new Thread(new MonThread2()).start();
-		//new Thread(new MonThread3()).start();
-		//new Thread(new MonThread4()).start();
-		//new Thread(new MonThread5()).start();
+		paires.add(table0);
+		paires.add(table2);
+		paires.add(table4);
+		paires.add(table6);
+		impaires.add(table1);
+		impaires.add(table3);
+		impaires.add(table5);
+		impaires.add(table7);
+
 		
+		
+		Reduce r = new Reduce(paires);
+		r.start();
+		r = new Reduce(impaires);
+		r.start();		
+		r.join();
+		System.out.println(table0);
+		System.out.println(table1);
+		ecritureFichier(table0,table1);
+				
 	    
 	    
 		
